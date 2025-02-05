@@ -1,0 +1,32 @@
+uuid: 80454de6-42dd-430a-94ce-34d7ad4869c7
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.recipies.body
+    - field.field.node.recipies.field_recipie_category
+    - node.type.recipies
+  module:
+    - text
+    - user
+id: node.recipies.teaser
+targetEntityType: node
+bundle: recipies
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_recipie_category: true
