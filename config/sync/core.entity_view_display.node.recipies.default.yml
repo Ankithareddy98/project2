@@ -1,0 +1,37 @@
+uuid: bd0591b5-3f5b-4059-816d-30e6eace7dfc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.recipies.body
+    - field.field.node.recipies.field_recipie_category
+    - node.type.recipies
+  module:
+    - text
+    - user
+id: node.recipies.default
+targetEntityType: node
+bundle: recipies
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_recipie_category:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

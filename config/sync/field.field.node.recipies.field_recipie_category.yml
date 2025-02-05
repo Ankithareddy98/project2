@@ -1,0 +1,29 @@
+uuid: 4a921a47-9263-4017-a2ef-b45516c8e7d8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_recipie_category
+    - node.type.recipies
+    - taxonomy.vocabulary.cuisine
+id: node.recipies.field_recipie_category
+field_name: field_recipie_category
+entity_type: node
+bundle: recipies
+label: 'Recipie Category'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      cuisine: cuisine
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
