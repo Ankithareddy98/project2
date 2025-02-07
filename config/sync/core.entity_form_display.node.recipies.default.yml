@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.recipies.body
+    - field.field.node.recipies.field_display_body
     - field.field.node.recipies.field_recipie_category
     - node.type.recipies
   module:
@@ -27,6 +28,12 @@ content:
   created:
     type: datetime_timestamp
     weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_display_body:
+    type: options_buttons
+    weight: 123
     region: content
     settings: {  }
     third_party_settings: {  }

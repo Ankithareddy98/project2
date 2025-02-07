@@ -1,0 +1,11 @@
+uuid: adef4153-b775-4954-9f6e-98612c395f21
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.title_view
+label: 'Title View'
+description: ''
+targetEntityType: node
+cache: true
