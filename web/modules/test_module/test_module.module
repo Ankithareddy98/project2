@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for TestModule module.
+ * Implementing hook_preprocess_HOOK
+ */
+
+function test_module_preprocess_node(&$variables) {
+  
+    $node = $variables['elements']['#node'];
+    
+  
+    $display = $node->get('field_display_body')->value;
+  
+    $body_field = $node->get('body')->value;
+
+    if (!empty($body_field) && $display){
+        $variables['display_body'] = 1;
+    }
+    else {
+        $variables['display_body'] = 0;
+    }
+    unset($variables['content']['field_display_body']); // or without() in twig $ hide()
+
+}

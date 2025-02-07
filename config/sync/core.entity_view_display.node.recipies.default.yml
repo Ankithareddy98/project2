@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.recipies.body
+    - field.field.node.recipies.field_display_body
     - field.field.node.recipies.field_recipie_category
     - node.type.recipies
   module:
@@ -20,6 +21,16 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 101
+    region: content
+  field_display_body:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 103
     region: content
   field_recipie_category:
     type: entity_reference_label

@@ -1,0 +1,21 @@
+uuid: a7b2a633-95a9-42c0-ae29-1458c700f059
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_display_body
+    - node.type.recipies
+id: node.recipies.field_display_body
+field_name: field_display_body
+entity_type: node
+bundle: recipies
+label: 'Display Body?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
