@@ -9,22 +9,25 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 /**
  * Provides a 'Hello' Block.
  */
-
- #[Block(
+#[Block(
     id: "hello_block",
     admin_label: new TranslatableMarkup("Hello block"),
     category: new TranslatableMarkup("Hello World")
   )]
 
-  class HelloBlock extends BlockBase {
+class HelloBlock extends BlockBase {
 
-    /**
-     * {@inheritdoc}
-     */
-   public function build() {
+  /**
+   * {@inheritdoc}
+   */
+  public function build() {
     return [
-        '#markup' => $this->t('Hello, World!'),
+      '#theme' => 'block_hello_block',
+      '#test_var' => 'Hello from twig!',
+
+      // '#markup' => $this->t('Hello, World!'),
     ];
-   }
+
   }
-  
+
+}
