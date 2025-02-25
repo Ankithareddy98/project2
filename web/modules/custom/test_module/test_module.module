@@ -54,3 +54,16 @@ function test_module_preprocess_node(&$variables) {
   });
   $variables['other_taxonomy_terms'] = $other_taxonomy_terms;
 }
+
+/**
+ * Implementing test_module_theme().
+ */
+function test_module_theme($existing, $type, $theme, $path) {
+  return [
+    'block_hello_block' => [
+      'variables' => [
+        'test_var' => NULL,
+      ],
+    ],
+  ];
+}

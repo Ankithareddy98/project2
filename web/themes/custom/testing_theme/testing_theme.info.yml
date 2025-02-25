@@ -1,6 +1,6 @@
 name: Test Theme1
 type: theme
 description: My test theme
-core_version_requirement: ^9||^10||^11
+core_version_requirement: ^10||^11
 package: Custom
 base theme: olivero
