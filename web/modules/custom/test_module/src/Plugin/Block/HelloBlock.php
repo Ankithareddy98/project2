@@ -26,14 +26,15 @@ class HelloBlock extends BlockBase {
     $config = $this->getConfiguration();
     $firstName = !empty($config['first_name']) ? $config['first_name'] : $this->t('First Name Empty');
     $lastName = !empty($config['last_name']) ? $config['last_name'] : $this->t('Last Name Empty');
-
+    $display_value = !empty($config['display_last_name']);
+    $display_last_name1 = $display_value ? "$firstName $lastName" : $firstName;
+    
     return [
       '#theme' => 'block_hello_block',
       '#test_var' => 'Hello from twig!',
       '#firstName_entered' => $firstName,
       '#lastName_entered' => $lastName,
-
-      // '#markup' => $this->t('Hello, World!'),
+      '#conditional_display' => $display_last_name1,
     ];
 
   }
@@ -43,9 +44,9 @@ class HelloBlock extends BlockBase {
    */
   public function defaultConfiguration() {
     return [
-     // 'hello_block_name' => $this->t(''),
-      'first_name' => $this->t(''),
-      'last_name' => $this->t(''),
+      'first_name' => '',
+      'last_name' => '',
+      'display_last_name' => 0,
     ];
   }
 
@@ -67,6 +68,13 @@ class HelloBlock extends BlockBase {
       '#default_value' => $this->configuration['last_name'],
     ];
 
+    $form['display_last_name'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display Last Name'),
+      '#description' => $this->t('Please check the box to display last name'),
+      '#default_value' => $this->configuration['display_last_name'] ?? 0,
+    ];
+
     return $form;
   }
 
@@ -77,6 +85,7 @@ class HelloBlock extends BlockBase {
     $values = $form_state->getValues();
     $this->configuration['first_name'] = $values['first_name'];
     $this->configuration['last_name'] = $values['last_name'];
+    $this->configuration['display_last_name'] = $values['display_last_name'];
   }
 
 }
