@@ -63,6 +63,9 @@ function test_module_theme($existing, $type, $theme, $path) {
     'block_hello_block' => [
       'variables' => [
         'test_var' => NULL,
+       // 'name_entered' => NULL,
+        'firstName_entered' => NULL,
+        'lastName_entered' => NULL,
       ],
     ],
   ];
