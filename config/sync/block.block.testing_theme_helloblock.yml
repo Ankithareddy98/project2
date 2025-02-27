@@ -1,0 +1,29 @@
+uuid: 47f96658-0639-4f39-a39a-2ad57d5d7dc5
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+    - test_module
+  theme:
+    - testing_theme
+id: testing_theme_helloblock
+theme: testing_theme
+region: content
+weight: 0
+provider: null
+plugin: hello_block
+settings:
+  id: hello_block
+  label: 'Hello block'
+  label_display: visible
+  provider: test_module
+  first_name: Goutham
+  last_name: 'Rama Murthy'
+  display_last_name: 1
+  hello_block_name: 'Ankitha !'
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'

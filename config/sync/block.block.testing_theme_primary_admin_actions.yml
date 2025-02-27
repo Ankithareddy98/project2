@@ -9,7 +9,7 @@ _core:
 id: testing_theme_primary_admin_actions
 theme: testing_theme
 region: highlighted
-weight: -5
+weight: -7
 provider: null
 plugin: local_actions_block
 settings:

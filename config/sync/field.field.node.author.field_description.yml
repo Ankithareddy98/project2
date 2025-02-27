@@ -1,0 +1,19 @@
+uuid: 2441841b-2e9d-41d1-b4ce-4e18e6a2e2c8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_description
+    - node.type.author
+id: node.author.field_description
+field_name: field_description
+entity_type: node
+bundle: author
+label: Description
+description: 'Details about author.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

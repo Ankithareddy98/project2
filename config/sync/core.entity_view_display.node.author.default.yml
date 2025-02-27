@@ -1,30 +1,27 @@
-uuid: 9e679c49-8c36-4d31-b4e2-8ef2a9d7539a
+uuid: 9a1388bb-a4e2-45a3-b9d1-c9c2ca888192
 langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.page.body
-    - node.type.page
+    - field.field.node.author.field_description
+    - node.type.author
   module:
-    - text
     - user
-_core:
-  default_config_hash: M_Y8L5tfmhx7DR143E05YyZSpvgil6VFvqcfBWykalg
-id: node.page.default
+id: node.author.default
 targetEntityType: node
-bundle: page
+bundle: author
 mode: default
 content:
-  body:
-    type: text_default
+  field_description:
+    type: basic_string
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 100
+    weight: 1
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 101
+    weight: 2
     region: content
 hidden: {  }

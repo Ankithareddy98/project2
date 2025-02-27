@@ -11,7 +11,7 @@ _core:
 id: testing_theme_search_form_narrow
 theme: testing_theme
 region: primary_menu
-weight: -4
+weight: -8
 provider: null
 plugin: search_form_block
 settings:
