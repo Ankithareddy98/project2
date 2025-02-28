@@ -11,27 +11,46 @@
 function test_module_preprocess_node(&$variables) {
 
   $node = $variables['elements']['#node'];
+  $display_title = true;
+  // Ensure the field 'field_display_body' exists before using it
+  if ($node->hasField('field_display_body') && !$node->get('field_display_body')->isEmpty()) {
+    $display = $node->get('field_display_body')->value;
+  } else {
+    $display = 0; // Default to not displaying if field is missing
+  }
 
-  $display = $node->get('field_display_body')->value;
+  // Ensure 'body' field exists before using it
+  if ($node->hasField('body')) {
+    $body_field = $node->get('body')->value;
+  } else {
+    $body_field = ''; // Default to empty if field is missing
+  }
 
-  $body_field = $node->get('body')->value;
-
-  if (!empty($body_field) && $display) {
-    $variables['display_body'] = 1;
+  // Set display_body flag based on body and display value
+  if($node->bundle() === 'recipies') {
+    $variables['display_body'] = (!empty($body_field) && $display) ? 1 : 0;
   }
   else {
-    $variables['display_body'] = 0;
+    $variables['display_body'] = 1;
   }
-  unset($variables['content']['field_display_body']);
 
-  $current_node_taxonomy = $node->get('field_recipie_category')->referencedEntities();
-  $current_taxonomy_term = [];
-  foreach ($current_node_taxonomy as $term) {
-    $current_taxonomy_term[] = [
-      "name" => $term->getName(),
-      "url" => $term->toUrl()->setAbsolute()->toString(),
-    ];
-  }
+  // Remove field_display_body from rendering if it exists
+  if ($node->hasField('field_display_body')) {
+    unset($variables['content']['field_display_body']);
+  }  
+  
+   // Ensure the taxonomy reference field exists before using it
+   $current_taxonomy_term = [];
+   if ($node->hasField('field_recipie_category')) {
+     $current_node_taxonomy = $node->get('field_recipie_category')->referencedEntities();
+     
+     foreach ($current_node_taxonomy as $term) {
+       $current_taxonomy_term[] = [
+         "name" => $term->getName(),
+         "url" => $term->toUrl()->setAbsolute()->toString(),
+       ];
+     }
+   } 
 
   $vid = 'cuisine';
   $storage = Drupal::entityTypeManager()->getStorage('taxonomy_term');
@@ -53,6 +72,7 @@ function test_module_preprocess_node(&$variables) {
     return strcmp($a['url'], $b['url']);
   });
   $variables['other_taxonomy_terms'] = $other_taxonomy_terms;
+  $variables['display_title'] = $display_title;
 }
 
 /**

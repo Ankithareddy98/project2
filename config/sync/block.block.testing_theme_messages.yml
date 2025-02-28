@@ -11,7 +11,7 @@ _core:
 id: testing_theme_messages
 theme: testing_theme
 region: highlighted
-weight: -5
+weight: -6
 provider: null
 plugin: system_messages_block
 settings:

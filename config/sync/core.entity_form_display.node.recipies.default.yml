@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.recipies.body
     - field.field.node.recipies.field_display_body
     - field.field.node.recipies.field_recipie_category
+    - field.field.node.recipies.field_select_your_author
     - node.type.recipies
   module:
     - path
@@ -40,6 +41,12 @@ content:
   field_recipie_category:
     type: options_select
     weight: 122
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_select_your_author:
+    type: options_select
+    weight: 124
     region: content
     settings: {  }
     third_party_settings: {  }

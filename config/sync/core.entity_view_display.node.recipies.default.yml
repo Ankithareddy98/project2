@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.recipies.body
     - field.field.node.recipies.field_display_body
     - field.field.node.recipies.field_recipie_category
+    - field.field.node.recipies.field_select_your_author
     - node.type.recipies
   module:
     - text
@@ -39,6 +40,14 @@ content:
       link: true
     third_party_settings: {  }
     weight: 102
+    region: content
+  field_select_your_author:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 104
     region: content
   links:
     settings: {  }

@@ -9,7 +9,7 @@ _core:
 id: testing_theme_secondary_local_tasks
 theme: testing_theme
 region: highlighted
-weight: -2
+weight: -4
 provider: null
 plugin: local_tasks_block
 settings:
