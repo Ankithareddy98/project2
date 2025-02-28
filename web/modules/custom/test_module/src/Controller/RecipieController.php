@@ -16,7 +16,8 @@ class RecipieController extends ControllerBase {
    */
   public function myRecipiePage() {
     return [
-      '#markup' => 'Hello, world',
+      '#theme' => 'controller_template',
+      '#controller_var' => 'Hello World from Twig Template!',
     ];
   }
 

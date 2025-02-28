@@ -86,7 +86,12 @@ function test_module_theme($existing, $type, $theme, $path) {
         'firstName_entered' => NULL,
         'lastName_entered' => NULL,
         'conditional_display' => NULL,
+      ],
+    ],
 
+    'controller_template' => [
+      'variables' => [
+        'controller_var' => NULL,
       ],
     ],
   ];
