@@ -1,1 +1,13 @@
 <h3>{{ controller_var }}</h3>
+{% if array %}
+  <h2>Titles of recipies</h2>
+  <ul>
+    {% for node in array %}
+      <li>
+        <h3>{{ node.title.value }}</h3>  {# Display the recipe title #}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No recipes found for requested cuisine.</p>
+{% endif %}
