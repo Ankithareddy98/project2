@@ -23,13 +23,13 @@ class RecipieController extends ControllerBase {
     $ids = $node->getQuery()
       ->condition('status', 1)
       ->condition('type', 'recipies')
-    // Or 'field_recipie_category.name'.
-      ->condition('field_recipie_category.entity:taxonomy_term.name', 'chinese')
+      // Or 'field_recipie_category.name'.
+      ->condition('field_recipie_category.entity:taxonomy_term.name', 'indian')
       ->accessCheck(TRUE)
       ->execute();
-
+    
     $recipie_title = $node->loadMultiple($ids);
-
+        
     return [
       '#theme' => 'controller_template',
       '#controller_var' => 'Hello World from Twig Template!',
