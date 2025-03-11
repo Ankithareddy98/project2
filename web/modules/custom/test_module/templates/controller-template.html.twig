@@ -1,0 +1,19 @@
+{{ attach_library('test_module/custom_styles') }}
+
+<h2 style="text-align: center;">TITLES OF RECIPIES</h2>
+<div class='container-wrapper'>
+  <div class='card-box'>
+      {% if array %}
+         {% for node in array %}
+         <div class='individual-cards'>
+            <h3>{{ node.title.value }}</h3> {# Display the recipe title #}
+            <h4>{{ node.field_select_your_author.entity.title.value}}</h4> 
+            <p>{{ node.created.value|date('F d, y')}}
+          </div>
+         {% endfor %}
+      {% else %}
+        <p>No recipes found for requested cuisine.</p>
+      {% endif %} 
+   
+  </div>
+</div>

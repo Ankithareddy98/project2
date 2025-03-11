@@ -11,46 +11,50 @@
 function test_module_preprocess_node(&$variables) {
 
   $node = $variables['elements']['#node'];
-  $display_title = true;
-  // Ensure the field 'field_display_body' exists before using it
+  $display_title = TRUE;
+  // Ensure the field 'field_display_body' exists before using it.
   if ($node->hasField('field_display_body') && !$node->get('field_display_body')->isEmpty()) {
     $display = $node->get('field_display_body')->value;
-  } else {
-    $display = 0; // Default to not displaying if field is missing
+  }
+  else {
+    // Default to not displaying if field is missing.
+    $display = 0;
   }
 
-  // Ensure 'body' field exists before using it
+  // Ensure 'body' field exists before using it.
   if ($node->hasField('body')) {
     $body_field = $node->get('body')->value;
-  } else {
-    $body_field = ''; // Default to empty if field is missing
+  }
+  else {
+    // Default to empty if field is missing.
+    $body_field = '';
   }
 
-  // Set display_body flag based on body and display value
-  if($node->bundle() === 'recipies') {
+  // Set display_body flag based on body and display value.
+  if ($node->bundle() === 'recipies') {
     $variables['display_body'] = (!empty($body_field) && $display) ? 1 : 0;
   }
   else {
     $variables['display_body'] = 1;
   }
 
-  // Remove field_display_body from rendering if it exists
+  // Remove field_display_body from rendering if it exists.
   if ($node->hasField('field_display_body')) {
     unset($variables['content']['field_display_body']);
-  }  
-  
-   // Ensure the taxonomy reference field exists before using it
-   $current_taxonomy_term = [];
-   if ($node->hasField('field_recipie_category')) {
-     $current_node_taxonomy = $node->get('field_recipie_category')->referencedEntities();
-     
-     foreach ($current_node_taxonomy as $term) {
-       $current_taxonomy_term[] = [
-         "name" => $term->getName(),
-         "url" => $term->toUrl()->setAbsolute()->toString(),
-       ];
-     }
-   } 
+  }
+
+  // Ensure the taxonomy reference field exists before using it.
+  $current_taxonomy_term = [];
+  if ($node->hasField('field_recipie_category')) {
+    $current_node_taxonomy = $node->get('field_recipie_category')->referencedEntities();
+
+    foreach ($current_node_taxonomy as $term) {
+      $current_taxonomy_term[] = [
+        "name" => $term->getName(),
+        "url" => $term->toUrl()->setAbsolute()->toString(),
+      ];
+    }
+  }
 
   $vid = 'cuisine';
   $storage = Drupal::entityTypeManager()->getStorage('taxonomy_term');
@@ -86,7 +90,13 @@ function test_module_theme($existing, $type, $theme, $path) {
         'firstName_entered' => NULL,
         'lastName_entered' => NULL,
         'conditional_display' => NULL,
+      ],
+    ],
 
+    'controller_template' => [
+      'variables' => [
+        'controller_var' => NULL,
+        'array' => NULL,
       ],
     ],
   ];

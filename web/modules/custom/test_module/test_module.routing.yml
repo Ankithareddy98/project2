@@ -1,0 +1,7 @@
+test_module.recipie_page:
+  path: "/recipiepage"
+  defaults:
+    _controller: '\Drupal\test_module\Controller\RecipieController::myRecipiePage'
+    _title: "My first page in D8"
+  requirements:
+    _permission: "access content"
