@@ -19,12 +19,17 @@ body {
   gap: 20px;
   padding: 50px 0;
   overflow-x: hidden;
+  align-items: stretch; /* Ensures uniform height */
 }
 
 .individual-cards {
   flex-basis: calc(33.33333% - 30px);
   flex-wrap: wrap;
   text-align: center;
+  height: auto; /* Ensures a base height */
+  min-height: 250px;
+  width: 200px; /* Ensures a base width */
+  justify-content: space-between; /* Distributes content evenly */
   background-color: rgb(131, 170, 212);
   padding: 50px 0;
   border-radius: 28px;
@@ -34,4 +39,12 @@ body {
 .individual-cards:hover {
   transform: scale(1.05); /* Slightly enlarges the card on hover */
   background-color: rgb(8, 91, 179); /* Changes background color on hover */
+}
+
+@media screen and (max-width: 500px) {
+  .card-box {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 20px !important;
+  }
 }
