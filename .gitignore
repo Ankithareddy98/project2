@@ -49,3 +49,4 @@ sites/simpletest
 
 #Ignore web/core
 /web/core/*
+.vscode/launch.json
