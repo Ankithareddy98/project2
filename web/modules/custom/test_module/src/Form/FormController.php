@@ -146,64 +146,20 @@ class FormController extends FormBase {
       $this->messenger()->addStatus($this->t('Task added successfully!'));
     }
 
-    // Rebuild the form.
-    $form_state->setRebuild(TRUE);
+   // Rebuild the form.
+   $form_state->setRebuild(TRUE);
+
+   // Store user input to database.
+   \Drupal::database()->insert('users_data')
+   ->fields([
+    'uid' => \Drupal::currentUser()->id(),
+    'task' => $task,
+   ])
+   ->execute();
+   $this->messenger()->addStatus($this->t('Task saved to the database successfully!'));
+  
   }
 
-  /**
-   * Switch task to edit mode and rebuild form.
-   */
-  public function editTaskCallback(array &$form, FormStateInterface $form_state) {
-    $triggering_element = $form_state->getTriggeringElement();
-    $button_name = $triggering_element['#name'];
-
-    // Extract the index from button name (edit_0, edit_1, etc.)
-    preg_match('/edit_(\d+)/', $button_name, $matches);
-    $index = $matches[1];
-
-    // Set edit mode.
-    $tasks = \Drupal::state()->get('todo_tasks', []);
-    $form_state->set('edit_index', $index);
-    $form_state->set('edit_value', $tasks[$index] ?? '');
-
-    // Rebuild form to reflect edit mode.
-    $form_state->setRebuild(TRUE);
-  }
-
-  /**
-   * Saves the edited task and updates via AJAX.
-   */
-  public function saveEditedTask(array &$form, FormStateInterface $form_state) {
-    $triggering_element = $form_state->getTriggeringElement();
-    $button_name = $triggering_element['#name'];
-
-    // Extract the index from button name (save_0, save_1, etc.)
-    preg_match('/save_(\d+)/', $button_name, $matches);
-    $index = $matches[1];
-
-    $task_value = $form_state->getValue(['task_list', "task_$index"]);
-   // $task_value = $form_state->getValue("task_$index");
-    $tasks = \Drupal::state()->get('todo_tasks', []);
-
-    // Update task if valid.
-    if (isset($tasks[$index]) && !empty($task_value)) {
-      $tasks[$index] = $task_value;
-      \Drupal::state()->set('todo_tasks', $tasks);
-      $this->messenger()->addStatus($this->t('Task updated successfully.'));
-    }
-    else {
-      $this->messenger()->addError($this->t('Task not found or empty value.'));
-    }
-
-    // Reset edit mode.
-    $form_state->set('edit_index', NULL);
-    $form_state->set('edit_value', NULL);
-    $form_state->setRebuild(TRUE);
-  }
-
-  /**
-   * Callback to refresh the task list via AJAX.
-   */
   public function myAjaxCallback(array &$form, FormStateInterface $form_state) {
     return $form['task_list']; // Return the updated task list
   }

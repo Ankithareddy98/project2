@@ -1,0 +1,35 @@
+function hook_schema() : array {
+    $schema['users_data'] = [
+        'description' => 'Stores form data as key/value pairs per user.',
+        'fields' => [
+            'uid' => [
+                'description' => 'The {users}.uid this record affects.',
+                'type' => 'int',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+                'default' => 0,
+            ],
+          
+            'task' => [
+                'description' => 'The description of task to be done.',
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => TRUE,
+                'default' => '',
+            ],
+        ],
+        'primary key' => [
+            'uid',
+            'task',
+        ],
+        'indexes' => [
+            'uid' => [
+                'uid',
+            ],
+            'task' => [
+                'task',
+            ],
+        ],
+    ];
+    return $schema;
+}
