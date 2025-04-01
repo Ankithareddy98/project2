@@ -26,7 +26,14 @@ class FormController extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Retrieve stored tasks from state API.
-    $tasks = \Drupal::state()->get('todo_tasks', []);
+   // $tasks = \Drupal::state()->get('todo_tasks', []);
+    $tasks = \Drupal::database()->select('users_data', 'u')
+        ->fields('u', ['task'])
+        ->condition('uid', \Drupal::currentUser()->id())
+        ->execute()
+        ->fetchCol();
+
+
     $edit_index = $form_state->get('edit_index');
     $edit_value = $form_state->get('edit_value');
 
@@ -168,21 +175,46 @@ class FormController extends FormBase {
    * Deletes the task and redirects to /todo.
    */
   public function deleteTask($task_id) {
-    $tasks = \Drupal::state()->get('todo_tasks', []);
+    // $tasks = \Drupal::state()->get('todo_tasks', []);
 
-    // Check if task exists and delete it.
-    if (isset($tasks[$task_id])) {
-      unset($tasks[$task_id]);
+    // // Check if task exists and delete it.
+    // if (isset($tasks[$task_id])) {
+    //   unset($tasks[$task_id]);
 
-      // Re-index and save tasks.
-      \Drupal::state()->set('todo_tasks', array_values($tasks));
-      $this->messenger()->addStatus(t('Task deleted successfully.'));
-    }
-    else {
-      $this->messenger()->addError(t('Task not found.'));
-    }
-
-    // Redirect to /todo after deletion.
-    return new RedirectResponse('/todo');
+    //   // Re-index and save tasks.
+    //   \Drupal::state()->set('todo_tasks', array_values($tasks));
+    //   $this->messenger()->addStatus(t('Task deleted successfully.'));
+    // }
+    // else {
+    //   $this->messenger()->addError(t('Task not found.'));
+    // }
+      $database = \Drupal::database();
+    
+      // Fetch the actual task name using the index
+      $task_query = $database->select('users_data', 'u')
+        ->fields('u', ['task'])
+        ->condition('uid', \Drupal::currentUser()->id())
+        ->range($task_id, 1) // Get the task at the given index
+        ->execute()
+        ->fetchField();
+    
+      if ($task_query) {
+        // Now delete using the correct task name
+        $query = $database->delete('users_data')
+          ->condition('uid', \Drupal::currentUser()->id())
+          ->condition('task', $task_query)
+          ->execute();
+    
+        if ($query) {
+          $this->messenger()->addStatus(t('Task was deleted successfully!'));
+        } else {
+          $this->messenger()->addError(t('Task deletion failed.'));
+        }
+      } else {
+        $this->messenger()->addError(t('Task not found.'));
+      }
+    
+      // Redirect to /todo after deletion
+      return new RedirectResponse('/todo');
   }
 }
