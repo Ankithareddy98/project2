@@ -33,7 +33,6 @@ class FormController extends FormBase {
         ->execute()
         ->fetchCol();
 
-
     $edit_index = $form_state->get('edit_index');
     $edit_value = $form_state->get('edit_value');
 
