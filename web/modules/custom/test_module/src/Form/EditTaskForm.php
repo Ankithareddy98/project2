@@ -27,8 +27,6 @@ class EditTaskForm extends FormBase {
 
       $task_value = \Drupal::request()->query->get('task_val');
 
-      dump($task_value);
-  
       if (!$task_value) {
         $this->messenger()->addError($this->t('Task not found.'));
         return new RedirectResponse('/todo');
@@ -62,11 +60,8 @@ class EditTaskForm extends FormBase {
       $task_id = $form_state->getValue('task_id');
       $new_task = $form_state->getValue('edit_task');
 
-      dump('task_id is =' . $task_id);
-      dump('new task value =' . $new_task);
-
       $original_task = \Drupal::request()->query->get('task_val');
-      dump('original task' . $original_task);
+
       // Update the task in DB.
       \Drupal::database()->update('users_data')
         ->fields(['task' => $new_task])

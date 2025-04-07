@@ -42,62 +42,19 @@ class FormController extends FormBase {
     $form['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('ADD'),
-        // '#ajax' => [
-        //   'callback' => '::myAjaxCallback',
-        //   'disable-refocus' => FALSE,
-        //   'wrapper' => 'task-list-wrapper',
-        //   'progress' => [
-        //     'type' => 'throbber',
-        //     'message' => $this->t('Adding task...'),
-        //   ],
-        // ],
+        '#ajax' => [
+          'callback' => '::myAjaxCallback',
+          'disable-refocus' => FALSE,
+          'wrapper' => 'task-list-wrapper',
+          'progress' => [
+            'type' => 'throbber',
+            'message' => $this->t('Adding task...'),
+          ],
+        ],
     ];
 
     // Task List Wrapper (This will be updated via AJAX).
-    $form['task_list'] = [
-      '#type' => 'container',
-      '#attributes' => ['id' => 'task-list-wrapper'],
-    ];
-
-    // Display stored tasks with Edit and Delete buttons.
-    if (!empty($tasks)) {
-      foreach ($tasks as $index => $task) {
-
-        // Display task as plain text with Edit/Delete buttons.
-        $form['task_list']["task_$index"] = [
-          '#markup' => '<div>' . $task . '</div>',
-        ];
-
-        $form['task_list']["edit_$index"] = [
-          '#type' => 'link',
-          '#title' => $this->t('Edit'),
-          '#url' => Url::fromRoute('test_module.task_edit', ['task_id' => $index], [
-            'query' => ['task_val' => $task],
-          ]),
-          '#attributes' => [
-        // Adds CSS classes to make the link look like a button.
-            'class' => ['button', 'edit-button'],
-          ],
-        ];
-
-        // Delete link with confirmation.
-        $form['task_list']["delete_$index"] = [
-          '#type' => 'link',
-          '#title' => $this->t('Delete'),
-          '#url' => Url::fromRoute('test_module.task_delete', ['task_id' => $index]),
-          '#attributes' => [
-            'class' => ['button', 'button--danger'],
-            'style' => 'margin-left: 5px; color: red;',
-            'onclick' => 'return confirm("Are you sure you want to delete this task?");',
-          ],
-        ];
-      }
-    }
-    else {
-      $form['task_list']['empty'] = [
-        '#markup' => $this->t('No tasks added yet.'),
-      ];
-    }
+    $form['task_list'] = $this->buildTaskList();
 
     return $form;
   }
@@ -106,21 +63,6 @@ class FormController extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Add a new task when 'ADD' is clicked.
-    $task = $form_state->getValue('input');
-
-    // Store user input to database.
-    \Drupal::database()->insert('users_data')
-      ->fields([
-        'uid' => \Drupal::currentUser()->id(),
-        'task' => $task,
-      ])
-      ->execute();
-    $this->messenger()->addStatus($this->t('Task saved to the database successfully!'));
-
-    $form_state->setRebuild(TRUE);
-    $form_state->setValue('input', '');
-    $form_state->unsetValue('input');
 
   }
 
@@ -128,8 +70,27 @@ class FormController extends FormBase {
    *
    */
   public function myAjaxCallback(array &$form, FormStateInterface $form_state) {
-    // Return the updated task list.
-    return $form['task_list'];
+
+    // Get user input
+    $task = $form_state->getValue('input');
+
+    if (!empty($task)) {
+      // Store the task in the database.
+      \Drupal::database()->insert('users_data')
+        ->fields([
+          'uid' => \Drupal::currentUser()->id(),
+          'task' => $task,
+        ])
+        ->execute();
+  
+      $this->messenger()->addStatus($this->t('Task saved!'));
+  
+      // Clear the input field
+      $form_state->setValue('input', '');
+      $form_state->unsetValue('input');
+    }
+  
+    return $this->buildTaskList();
   }
 
   /**
@@ -169,4 +130,49 @@ class FormController extends FormBase {
     return new RedirectResponse('/todo');
   }
 
+  private function buildTaskList() {
+    $task_list = [
+      '#type' => 'container',
+      '#attributes' => ['id' => 'task-list-wrapper'],
+    ];
+  
+    $tasks = \Drupal::database()->select('users_data', 'u')
+      ->fields('u', ['task'])
+      ->condition('uid', \Drupal::currentUser()->id())
+      ->execute()
+      ->fetchCol();
+  
+    if (!empty($tasks)) {
+      foreach ($tasks as $index => $task) {
+        $task_list["task_$index"] = [
+          '#markup' => '<div style="display:inline-block; margin-right:10px;">' . $task . '</div>',
+        ];
+  
+        $task_list["edit_$index"] = [
+          '#type' => 'link',
+          '#title' => $this->t('Edit'),
+          '#url' => Url::fromRoute('test_module.task_edit', ['task_id' => $index], [
+            'query' => ['task_val' => $task],
+          ]),
+          '#attributes' => ['class' => ['button']],
+        ];
+  
+        $task_list["delete_$index"] = [
+          '#type' => 'link',
+          '#title' => $this->t('Delete'),
+          '#url' => Url::fromRoute('test_module.task_delete', ['task_id' => $index]),
+          '#attributes' => [
+            'class' => ['button', 'button--danger'],
+            'style' => 'margin-left: 5px; color: red;',
+            'onclick' => 'return confirm("Are you sure you want to delete this task?");',
+          ],
+        ];
+      }
+    } else {
+      $task_list['empty'] = ['#markup' => $this->t('No tasks added yet.')];
+    }
+  
+    return $task_list;
+  }
+  
 }
