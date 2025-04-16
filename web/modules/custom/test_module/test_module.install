@@ -1,4 +1,6 @@
-function hook_schema() : array {
+<?php
+
+function test_module_schema() : array {
     $schema['users_data'] = [
         'description' => 'Stores form data as key/value pairs per user.',
         'fields' => [
@@ -32,4 +34,21 @@ function hook_schema() : array {
         ],
     ];
     return $schema;
+}
+
+/**
+ * Add 'created' timestamp column to users_data table.
+ */
+
+function test_module_update_8101() {
+    $schema = \Drupal::database()->schema();
+
+    if(!$schema->fieldExists('users_data', 'created')) {
+        $schema->addField('users_data', 'created', [
+            'description' => 'The created time of the task',
+            'type' => 'int',
+            'not null' => TRUE,
+            'default' => 0,
+        ]);
+    }
 }

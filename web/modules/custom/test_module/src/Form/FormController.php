@@ -25,11 +25,19 @@ class FormController extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Retrieve stored tasks database API.
 
-    $tasks = \Drupal::database()->select('users_data', 'u')
-      ->fields('u', ['task'])
+    // $tasks = \Drupal::database()->select('users_data', 'u')
+    //   ->fields('u', ['task'])
+    //   ->condition('uid', \Drupal::currentUser()->id())
+    //   ->orderBy('created', 'DESC')
+    //   ->execute()
+    //   ->fetchCol();
+    
+      $query = \Drupal::database()->select('users_data', 'u')
+      ->fields('u', ['task', 'created'])
       ->condition('uid', \Drupal::currentUser()->id())
-      ->execute()
-      ->fetchCol();
+      ->orderBy('created', 'DESC'); // <-- Important
+    
+    $tasks = $query->execute()->fetchCol();
   
     // Input text field to add task.
     $form['input'] = [
@@ -80,6 +88,7 @@ class FormController extends FormBase {
         ->fields([
           'uid' => \Drupal::currentUser()->id(),
           'task' => $task,
+          'created' => \Drupal::time()->getCurrentTime(),
         ])
         ->execute();
   
@@ -115,6 +124,7 @@ class FormController extends FormBase {
         ->condition('task', $task_query)
         ->execute();
 
+
       if ($query) {
         $this->messenger()->addStatus(t('Task was deleted successfully!'));
       }
@@ -136,11 +146,18 @@ class FormController extends FormBase {
       '#attributes' => ['id' => 'task-list-wrapper'],
     ];
   
-    $tasks = \Drupal::database()->select('users_data', 'u')
-      ->fields('u', ['task'])
+    // $tasks = \Drupal::database()->select('users_data', 'u')
+    //   ->fields('u', ['task', 'created'])
+    //   ->condition('uid', \Drupal::currentUser()->id())
+    //   ->execute()
+    //   ->fetchCol();
+
+    $query = \Drupal::database()->select('users_data', 'u')
+      ->fields('u', ['task', 'created'])
       ->condition('uid', \Drupal::currentUser()->id())
-      ->execute()
-      ->fetchCol();
+      ->orderBy('created', 'DESC'); // <-- Important
+    
+    $tasks = $query->execute()->fetchCol();
   
     if (!empty($tasks)) {
       foreach ($tasks as $index => $task) {

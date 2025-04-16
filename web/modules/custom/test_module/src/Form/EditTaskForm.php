@@ -29,7 +29,10 @@ class EditTaskForm extends FormBase {
 
       if (!$task_value) {
         $this->messenger()->addError($this->t('Task not found.'));
-        return new RedirectResponse('/todo');
+        // return new RedirectResponse('/todo');
+        $form_state = \Drupal::service('form_builder')->getFormState();
+        $form_state->setRedirect('test_module.form');
+        return [];
       }
   
       $form['edit_task'] = [
