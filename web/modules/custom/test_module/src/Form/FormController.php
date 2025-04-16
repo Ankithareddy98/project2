@@ -32,10 +32,10 @@ class FormController extends FormBase {
     //   ->execute()
     //   ->fetchCol();
     
-      $query = \Drupal::database()->select('users_data', 'u')
-      ->fields('u', ['task', 'created'])
-      ->condition('uid', \Drupal::currentUser()->id())
-      ->orderBy('created', 'DESC'); // <-- Important
+    $query = \Drupal::database()->select('users_data', 'u')
+    ->fields('u', ['task', 'created'])
+    ->condition('uid', \Drupal::currentUser()->id())
+    ->orderBy('created', 'DESC'); // <-- Important
     
     $tasks = $query->execute()->fetchCol();
   
@@ -105,23 +105,14 @@ class FormController extends FormBase {
   /**
    * Deletes the task and redirects to /todo.
    */
-  public function deleteTask($task_id) {
+  public function deleteTask($created) {
     $database = \Drupal::database();
 
-    // Fetch the actual task name using the index.
-    $task_query = $database->select('users_data', 'u')
-      ->fields('u', ['task'])
-      ->condition('uid', \Drupal::currentUser()->id())
-    // Get the task at the given index.
-      ->range($task_id, 1)
-      ->execute()
-      ->fetchField();
-
-    if ($task_query) {
-      // Now delete using the correct task name.
+    // Delete the task directly using 'created' + 'uid' as conditions.
+ 
       $query = $database->delete('users_data')
         ->condition('uid', \Drupal::currentUser()->id())
-        ->condition('task', $task_query)
+        ->condition('created', $created)
         ->execute();
 
 
@@ -131,10 +122,7 @@ class FormController extends FormBase {
       else {
         $this->messenger()->addError(t('Task deletion failed.'));
       }
-    }
-    else {
-      $this->messenger()->addError(t('Task not found.'));
-    }
+
 
     // Redirect to /todo after deletion.
     return new RedirectResponse('/todo');
@@ -157,33 +145,38 @@ class FormController extends FormBase {
       ->condition('uid', \Drupal::currentUser()->id())
       ->orderBy('created', 'DESC'); // <-- Important
     
-    $tasks = $query->execute()->fetchCol();
+    $tasks = $query->execute()->fetchAll();
   
     if (!empty($tasks)) {
-      foreach ($tasks as $index => $task) {
-        $task_list["task_$index"] = [
-          '#markup' => '<div style="display:inline-block; margin-right:10px;">' . $task . '</div>',
+      foreach ($tasks as $task) {
+        $task_text = $task->task;
+        $created_ts = $task->created;
+
+        $task_list["task_$created_ts"] = [
+          '#markup' => '<div style="display:inline-block; margin-right:10px;">' . $task_text . '</div>',
         ];
   
-        $task_list["edit_$index"] = [
-          '#type' => 'link',
-          '#title' => $this->t('Edit'),
-          '#url' => Url::fromRoute('test_module.task_edit', ['task_id' => $index], [
-            'query' => ['task_val' => $task],
-          ]),
-          '#attributes' => ['class' => ['button']],
-        ];
-  
-        $task_list["delete_$index"] = [
-          '#type' => 'link',
-          '#title' => $this->t('Delete'),
-          '#url' => Url::fromRoute('test_module.task_delete', ['task_id' => $index]),
-          '#attributes' => [
-            'class' => ['button', 'button--danger'],
-            'style' => 'margin-left: 5px; color: red;',
-            'onclick' => 'return confirm("Are you sure you want to delete this task?");',
-          ],
-        ];
+        if(!empty($created_ts)) { 
+          $task_list["edit_$created_ts"] = [
+            '#type' => 'link',
+            '#title' => $this->t('Edit'),
+            '#url' => Url::fromRoute('test_module.task_edit', ['created' => $created_ts], [
+              'query' => ['task_val' => $task_text],
+            ]),
+            '#attributes' => ['class' => ['button']],
+          ];
+
+          $task_list["delete_$created_ts"] = [
+            '#type' => 'link',
+            '#title' => $this->t('Delete'),
+            '#url' => Url::fromRoute('test_module.task_delete', ['created' => $created_ts]),
+            '#attributes' => [
+              'class' => ['button', 'button--danger'],
+              'style' => 'margin-left: 5px; color: red;',
+              'onclick' => 'return confirm("Are you sure you want to delete this task?");',
+            ],
+          ];
+        }
       }
     } else {
       $task_list['empty'] = ['#markup' => $this->t('No tasks added yet.')];
