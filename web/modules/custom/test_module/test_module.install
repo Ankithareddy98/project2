@@ -1,0 +1,54 @@
+<?php
+
+function test_module_schema() : array {
+    $schema['users_data'] = [
+        'description' => 'Stores form data as key/value pairs per user.',
+        'fields' => [
+            'uid' => [
+                'description' => 'The {users}.uid this record affects.',
+                'type' => 'int',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+                'default' => 0,
+            ],
+          
+            'task' => [
+                'description' => 'The description of task to be done.',
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => TRUE,
+                'default' => '',
+            ],
+        ],
+        'primary key' => [
+            'uid',
+            'task',
+        ],
+        'indexes' => [
+            'uid' => [
+                'uid',
+            ],
+            'task' => [
+                'task',
+            ],
+        ],
+    ];
+    return $schema;
+}
+
+/**
+ * Add 'created' timestamp column to users_data table.
+ */
+
+function test_module_update_8101() {
+    $schema = \Drupal::database()->schema();
+
+    if(!$schema->fieldExists('users_data', 'created')) {
+        $schema->addField('users_data', 'created', [
+            'description' => 'The created time of the task',
+            'type' => 'int',
+            'not null' => TRUE,
+            'default' => 0,
+        ]);
+    }
+}
