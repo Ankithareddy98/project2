@@ -31,3 +31,11 @@ test_module.task_edit:
   requirements:
     _permission: "access content"
     created: '\d+'
+
+test_module.task_page:
+  path: "/taskpage"
+  defaults:
+    _controller: '\Drupal\test_module\Controller\CacheController::taskPage'
+    _title: "Tasks Page"
+  requirements:
+    _permission: "access content"

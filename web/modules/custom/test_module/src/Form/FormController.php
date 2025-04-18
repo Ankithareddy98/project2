@@ -6,6 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides ToDo Form.
@@ -24,14 +25,7 @@ class FormController extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Retrieve stored tasks database API.
-
-    // $tasks = \Drupal::database()->select('users_data', 'u')
-    //   ->fields('u', ['task'])
-    //   ->condition('uid', \Drupal::currentUser()->id())
-    //   ->orderBy('created', 'DESC')
-    //   ->execute()
-    //   ->fetchCol();
-    
+   
     $query = \Drupal::database()->select('users_data', 'u')
     ->fields('u', ['task', 'created'])
     ->condition('uid', \Drupal::currentUser()->id())
@@ -91,6 +85,9 @@ class FormController extends FormBase {
           'created' => \Drupal::time()->getCurrentTime(),
         ])
         ->execute();
+      
+      // Invalidate the cache for the entire user's task list.
+      Cache::invalidateTags(['users_data_tasks:'. \Drupal::currentUser()->id()]);
   
       $this->messenger()->addStatus($this->t('Task saved!'));
   
@@ -115,8 +112,9 @@ class FormController extends FormBase {
         ->condition('created', $created)
         ->execute();
 
-
       if ($query) {
+         // Invalidate the cache for the entire user's task list.
+        Cache::invalidateTags(['users_data_tasks:'. \Drupal::currentUser()->id()]);
         $this->messenger()->addStatus(t('Task was deleted successfully!'));
       }
       else {
@@ -133,12 +131,6 @@ class FormController extends FormBase {
       '#type' => 'container',
       '#attributes' => ['id' => 'task-list-wrapper'],
     ];
-  
-    // $tasks = \Drupal::database()->select('users_data', 'u')
-    //   ->fields('u', ['task', 'created'])
-    //   ->condition('uid', \Drupal::currentUser()->id())
-    //   ->execute()
-    //   ->fetchCol();
 
     $query = \Drupal::database()->select('users_data', 'u')
       ->fields('u', ['task', 'created'])

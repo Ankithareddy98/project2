@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Url;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides a form to edit a task.
@@ -71,6 +72,9 @@ class EditTaskForm extends FormBase {
         ->condition('uid', \Drupal::currentUser()->id())
         ->condition('task', $original_task)
         ->execute();
+      
+      // Invalidate the cache for the entire user's task list.
+      Cache::invalidateTags(['users_data_tasks:'. \Drupal::currentUser()->id()]);
   
       $this->messenger()->addStatus($this->t('Task updated successfully!'));
   
