@@ -6,6 +6,14 @@ test_module.recipie_page:
   requirements:
     _permission: "access content"
 
+test_module.recipie_page_edited:
+  path: "/new-recipiepage"
+  defaults:
+    _controller: '\Drupal\test_module\Controller\UpdatedRecipieController::myRecipiePage'
+    _title: "My first page in D8"
+  requirements:
+    _permission: "access content"
+
 test_module.form:
   path: "/todo"
   defaults:

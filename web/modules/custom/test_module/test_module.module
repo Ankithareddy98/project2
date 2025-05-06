@@ -99,5 +99,6 @@ function test_module_theme($existing, $type, $theme, $path) {
         'array' => NULL,
       ],
     ],
+
   ];
 }

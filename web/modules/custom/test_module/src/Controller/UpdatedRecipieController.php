@@ -7,7 +7,7 @@ use Drupal\Core\Controller\ControllerBase;
 /**
  * Provides route responses for the test_module module.
  */
-class RecipieController extends ControllerBase {
+class UpdatedRecipieController extends ControllerBase {
 
   /**
    * Returns a Recipie page with paricular category.
@@ -17,12 +17,13 @@ class RecipieController extends ControllerBase {
    */
   public function myRecipiePage() {
 
+
     $node = \Drupal::entityTypeManager()->getStorage('node');
     $ids = $node->getQuery()
       ->condition('status', 1)
       ->condition('type', 'recipies')
       // Or 'field_recipie_category.name'.
-      ->condition('field_recipie_category.entity:taxonomy_term.name', 'indian')
+      ->condition('field_recipie_category.entity:taxonomy_term.name', 'italian')
       ->accessCheck(TRUE)
       ->execute();
     
