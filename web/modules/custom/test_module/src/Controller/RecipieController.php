@@ -17,8 +17,6 @@ class RecipieController extends ControllerBase {
    */
   public function myRecipiePage() {
 
-    $taxonomy_term_name = 'italian';
-
     $node = \Drupal::entityTypeManager()->getStorage('node');
     $ids = $node->getQuery()
       ->condition('status', 1)

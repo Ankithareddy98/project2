@@ -5,6 +5,8 @@
  * Implementing hook_preprocess_hook.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Displaying other taxonomy terms.
  */
@@ -99,5 +101,21 @@ function test_module_theme($existing, $type, $theme, $path) {
         'array' => NULL,
       ],
     ],
+
+    'node__recipies__card' => [
+      'render element' => 'content',
+      'path' => \Drupal::service('extension.list.module')->getPath('test_module') . '/templates',
+      'template' => 'node--recipies--card',
+    ],
   ];
+}
+
+/**
+ * Adding class name to views exposed filter form.
+ */
+function test_module_form_alter(&$form, FormStateInterface $form_state, $form_id) : void {
+  if ($form_id === 'views_exposed_form') {
+    $form['#attributes']['class'][] = 'custom-exposed-form-horizontal';
+    $form['#attributes']['library'][] = 'test_module/custom_styles';
+  }
 }
