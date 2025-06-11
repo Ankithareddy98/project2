@@ -17,7 +17,7 @@ body {
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 20px;
-  padding: 50px 0;
+  /* padding: 50px 0; */
   overflow-x: hidden;
   align-items: stretch; /* Ensures uniform height */
 }
@@ -28,30 +28,58 @@ body {
   text-align: center;
   height: auto; /* Ensures a base height */
   min-height: 250px;
-  width: 200px; /* Ensures a base width */
+  width: 350px;
   justify-content: space-between; /* Distributes content evenly */
   background-color: rgb(131, 170, 212);
-  padding: 50px 0;
+  padding: 50px 0px;
+  box-sizing: border-box;
   border-radius: 28px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
+}
+
+.individual-cards h2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* ✅ truncate long text with ... */
+  margin: 0;
 }
 
 .individual-cards:hover {
   transform: scale(1.05); /* Slightly enlarges the card on hover */
   background-color: rgb(8, 91, 179); /* Changes background color on hover */
+  border-radius: 28px !important;
 }
 
-/* Override for /new-recipiepage: one card per row */
-.path-new-recipiepage .card-box {
+/* Show full title when hovering over the card */
+.individual-cards:hover h2 {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  background: rgb(8, 91, 179);
+  padding: 4px;
+  border-radius: 28px !important;
+  z-index: 10;
+}
+/* Browse Recipe - single column stack */
+.custom-one-card-layout .card-box {
+  display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 20px;
 }
 
-.path-new-recipiepage .individual-cards {
+.custom-one-card-layout .individual-cards {
   flex-basis: 100% !important;
   width: 90% !important; /* Or 100% if you want edge-to-edge */
-  max-width: 700px; /* Optional: set a max width for better layout */
-  margin: 20px 0; /* Vertical spacing between cards */
+  min-width: 350px;
+  max-width: 350px; /* Optional: set a max width for better layout */
+  height: 350px;
+  /* margin: 0 !important; Vertical spacing between cards */
+  white-space: normal;
+  overflow-wrap: normal;
+  word-wrap: normal;
+  padding: 50px;
+  box-sizing: border-box;
 }
 
 @media screen and (max-width: 500px) {
@@ -60,4 +88,20 @@ body {
     align-items: center !important;
     gap: 20px !important;
   }
+}
+
+.view-id-browse_recipes {
+  display: flex !important; /* ✅ aligns all child elements in a row */
+  justify-content: center; /* ✅ centers the row */
+  flex-wrap: wrap; /* ✅ wraps to next line on small screens */
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+/* Make sure the filter elements don’t float or mess layout */
+.view-id-browse_recipes .custom-exposed-form-horizontal .form-item,
+.view-id-browse_recipes .custom-exposed-form-horizontal .form-actions {
+  display: inline-block;
+  margin: 10px;
 }
